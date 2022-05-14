@@ -1,10 +1,11 @@
-import { Form, Input, Button, Checkbox, Typography } from "antd";
+import { Form, Input, Button, Checkbox, Typography, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "./index.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/apiRequest";
 import MetaData from "../MetaData";
+import { clearAuthMessage } from "../../redux/authSlice";
 
 const { Title } = Typography;
 
@@ -47,6 +48,8 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const curUser = useSelector((state) => state.auth.login.currentUser);
+  const register = useSelector((state) => state.auth.register);
+  const msg = useSelector((state) => state.auth.msg);
   const onFinish = () => {
     const newUser = {
       name: name,
@@ -57,10 +60,14 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if (curUser) {
-      navigate("/");
+    if (msg) {
+      if (msg.code === 11000) {
+        message.error(`${msg.keyValue.email} already taken`);
+      }
+      message.error(msg);
+      dispatch(clearAuthMessage());
     }
-  }, [curUser]);
+  }, [register.error,msg]);
 
   return (
     <>

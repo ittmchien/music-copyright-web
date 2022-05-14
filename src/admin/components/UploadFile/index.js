@@ -32,10 +32,11 @@ const UploadFile = () => {
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
+      // dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
       fixed: "left",
+      render: (item) => (item.name.replace(".wav",""))
     },
   ];
 

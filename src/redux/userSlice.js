@@ -36,6 +36,9 @@ const userSlice = createSlice({
       state.profile.isFetching = false;
       state.profile.error = true;
     },
+    clearUserMessage: (state) => {
+      state.msg = "";
+    },
   },
 });
 
@@ -46,5 +49,6 @@ export const {
   updateProfileStart,
   updateProfileSuccess,
   updateProfileFailed,
+  clearUserMessage,
 } = userSlice.actions;
 export default userSlice.reducer;

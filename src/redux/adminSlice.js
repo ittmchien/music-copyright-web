@@ -50,6 +50,9 @@ const adminSlice = createSlice({
       state.users.error = true;
       state.msg = action.payload;
     },
+    clearAdminMessage: (state) => {
+      state.msg = "";
+    },
   },
 });
 
@@ -63,5 +66,6 @@ export const {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailed,
+  clearAdminMessage
 } = adminSlice.actions;
 export default adminSlice.reducer;

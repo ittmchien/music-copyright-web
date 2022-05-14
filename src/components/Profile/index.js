@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Typography } from "antd";
+import { Button, Form, Input, message, Tooltip, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -66,8 +66,11 @@ const Profile = () => {
         newUser,
         navigate,
         axiosJWT
-      );
-      message.success("Update profile successfully");
+      )
+        .then(
+          getUserProfile(curUser.accessToken, dispatch, curUser._id, axiosJWT)
+        )
+        .then(message.success("Update profile successful"));
     } else {
       const newUser = {
         name: name,
@@ -80,16 +83,19 @@ const Profile = () => {
         newUser,
         navigate,
         axiosJWT
-      );
-      message.success("Update profile successfully");
+      )
+        .then(
+          getUserProfile(curUser.accessToken, dispatch, curUser._id, axiosJWT)
+        )
+        .then(message.success("Update profile successful"));
     }
   };
 
   useEffect(() => {
-    if (!curUser) {
-      navigate("/");
-    }
-    if (!profile.user&&curUser) {
+    // if (!curUser) {
+    //   navigate("/");
+    // }
+    if (!profile.user && curUser) {
       getUserProfile(curUser.accessToken, dispatch, curUser._id, axiosJWT);
     }
     if (profile.user) {
@@ -102,7 +108,6 @@ const Profile = () => {
     <>
       {profile.isFetching ? (
         <>
-          <MetaData title={`Profile ${profile.user.name}`} />
           <Loader />
         </>
       ) : (
@@ -148,7 +153,8 @@ const Profile = () => {
 
             <Form.Item
               // name="password"
-              label="Password"
+              label="New Password"
+              tooltip="Empty this if you don't want to update password"
               rules={[
                 {
                   required: true,
@@ -158,20 +164,23 @@ const Profile = () => {
               ]}
               hasFeedback
             >
-              <Input.Password
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="new-password"
-              />
+              <Tooltip title="Empty this if you don't want to update password">
+                <Input.Password
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                  placeholder="Empty this if you don't want to update password"
+                />
+              </Tooltip>
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="confirm"
               label="Confirm Password"
               dependencies={["password"]}
               hasFeedback
               rules={[
                 {
-                  // required: true,
+                  required: true,
                   message: "Please confirm your password!",
                 },
                 ({ getFieldValue }) => ({
@@ -189,8 +198,8 @@ const Profile = () => {
                 }),
               ]}
             >
-              <Input.Password  />
-            </Form.Item>
+              <Input.Password />
+            </Form.Item> */}
             <Form.Item {...tailFormItemLayout}>
               <Button type="primary" htmlType="submit">
                 Update profile

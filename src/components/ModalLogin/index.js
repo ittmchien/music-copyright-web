@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Button, Checkbox } from "antd";
+import { Form, Input, Modal, Button, Checkbox, message } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 
 import React, { useEffect, useState } from "react";
@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { loginUser } from "../../redux/apiRequest";
 import "./index.scss";
+import { clearAuthMessage } from "../../redux/authSlice";
 
 const ModalLogin = ({ modalVisible }) => {
   const dispatch = useDispatch();
   const curUser = useSelector((state) => state.auth.login.currentUser);
+  const msg = useSelector((state) => state.auth.msg);
+  const register = useSelector((state) => state.auth.register);
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,11 +30,15 @@ const ModalLogin = ({ modalVisible }) => {
   };
 
   useEffect(() => {
+    if (msg.message) {
+      message.error(msg.message);
+      dispatch(clearAuthMessage());
+    }
     setVisible(modalVisible);
-    if (curUser) {
+    if (curUser || register.error) {
       setVisible(false);
     }
-  }, [modalVisible, curUser]);
+  }, [modalVisible, curUser, msg]);
   return (
     <>
       <Modal

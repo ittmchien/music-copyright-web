@@ -25,17 +25,29 @@ function App() {
         <Route path="/" element={<LayoutComponent />}>
           <Route index element={<Home />} />
           <Route path="register" element={<Register />} />
-          <Route path="profile" element={<Profile />} />
-          {!curUser || !curUser.admin ? (
-            <Route path="*" element={<NotAuthen />} />
+
+
+          {!curUser ? (
+            <Route path="*" element={<NotFound />} />
           ) : (
-            <Route path="admin" element={<AdminLayout />}>
-              <Route path="users" element={<TableUsers />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="upload" element={<UploadFile />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
+            <>
+              <Route path="profile" element={<Profile />} />
+
+              {!curUser.admin ? (
+                <Route path="*" element={<NotAuthen />} />
+              ) : (
+                <>
+                  <Route path="admin" element={<AdminLayout />}>
+                    <Route path="users" element={<TableUsers />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="upload" element={<UploadFile />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
+                </>
+              )}
+            </>
           )}
+
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

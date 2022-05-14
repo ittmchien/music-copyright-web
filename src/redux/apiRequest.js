@@ -135,7 +135,7 @@ export const updateProfile = async (
       headers: { token: `Bearer ${accessToken}` },
     });
     dispatch(updateProfileSuccess(res.data));
-    navigate("/");
+    navigate(0);
   } catch (error) {
     dispatch(updateProfileFailed(error.response.data));
   }
